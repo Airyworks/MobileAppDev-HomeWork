@@ -24,17 +24,6 @@ const alert = Alert.alert
 
 let uniqueId = 0
 
-let testEmployees = [
-  {name: '11', salary: '1', uniqueId: 1245001},
-  {name: '11', salary: '2', uniqueId: 1245002},
-  {name: '11', salary: '3', uniqueId: 1245003},
-  {name: '11', salary: '4', uniqueId: 1245004},
-  {name: '11', salary: '5', uniqueId: 1245005},
-  {name: '11', salary: '6', uniqueId: 1245006},
-  {name: '11', salary: '7', uniqueId: 1245007},
-  {name: '11', salary: '8', uniqueId: 1245008}
-]
-
 export default class SalarySheet extends React.Component {
   constructor(props) {
     super(props)
@@ -96,11 +85,10 @@ export default class SalarySheet extends React.Component {
     : null
 
     return (
-      <View>
+      <View style={{flex: 1}}>
         <Header
           centerComponent={{ text: 'Awesome Project', style: { color: '#fff', fontSize: 18 } }}
         />
-        <ScrollView>
         <View>
           <FormLabel>Name</FormLabel>
           <FormInput
@@ -123,17 +111,21 @@ export default class SalarySheet extends React.Component {
         </View>
         <Divider style={{ backgroundColor: '#FFF', height: 40 }} />
         <Text style={{ color: '#777', marginLeft: 10 }}>{ 'All Employees: ' }</Text>
-        <List>
-          {
-            this.state.employees.map((item)=>(
-              <ListItem
-                title={item.name}
-                subtitle={item.salary}
-                key={item.uniqueId.toString()}
-              />
-            ))
-          }
-        </List>
+        <ScrollView
+          contentContainerStyle={{flexGrow:1}}>
+          <View style={{flex: 1}}>
+            <List>
+              {
+                this.state.employees.map((item)=>(
+                  <ListItem
+                    title={item.name}
+                    subtitle={item.salary}
+                    key={item.uniqueId.toString()}
+                  />
+                ))
+              }
+            </List>
+          </View>
         </ScrollView>
       </View>
     )
