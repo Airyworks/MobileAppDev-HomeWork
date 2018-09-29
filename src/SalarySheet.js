@@ -87,7 +87,7 @@ export default class SalarySheet extends React.Component {
     return (
       <View style={{flex: 1}}>
         <Header
-          centerComponent={{ text: 'Awesome Project', style: { color: '#fff', fontSize: 18 } }}
+          centerComponent={{ text: 'Salary Listview', style: { color: '#fff', fontSize: 18, height: 30 } }}
         />
         <View>
           <FormLabel>Name</FormLabel>
