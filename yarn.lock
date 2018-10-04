@@ -4189,12 +4189,6 @@ react-is@^16.5.0:
   version "16.5.2"
   resolved "http://registry.npm.taobao.org/react-is/download/react-is-16.5.2.tgz#e2a7b7c3f5d48062eb769fcb123505eb928722e3"
 
-react-native-android-sqlite@^0.1.6:
-  version "0.1.6"
-  resolved "http://registry.npm.taobao.org/react-native-android-sqlite/download/react-native-android-sqlite-0.1.6.tgz#5b666c7907c31dd95520cf22c5cf28977c46fda3"
-  dependencies:
-    react-native ">= 0.11.0"
-
 react-native-elements@^0.19.1:
   version "0.19.1"
   resolved "http://registry.npm.taobao.org/react-native-elements/download/react-native-elements-0.19.1.tgz#f92b69d864a150215d01f81fe3c52a9cada83e45"
@@ -4216,7 +4210,7 @@ react-native-vector-icons@^5.0.0:
     prop-types "^15.5.10"
     yargs "^8.0.2"
 
-react-native@0.57.1, "react-native@>= 0.11.0":
+react-native@0.57.1:
   version "0.57.1"
   resolved "http://registry.npm.taobao.org/react-native/download/react-native-0.57.1.tgz#a8bffeac13e200b95bbebd11f7131570902e1e74"
   dependencies:

@@ -1,5 +1,5 @@
 {
-  "name": "MobileAppDevHomework",
+  "name": "mobile-app-dev-homework",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -23,7 +23,6 @@
     "babel-jest": "23.6.0",
     "jest": "23.6.0",
     "metro-react-native-babel-preset": "0.47.0",
-    "react-native-android-sqlite": "^0.1.6",
     "react-test-renderer": "16.5.0"
   },
   "jest": {
