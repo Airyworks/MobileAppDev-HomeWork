@@ -1,11 +1,11 @@
 import React from 'react'
+import { Provider } from 'react-redux'
+import store from './src/store'
 
-import SalarySheet from './src/SalarySheet'
+import Player from './src/components/Player'
 
-export default class App extends React.Component {
-  render() {
-    return (
-      <SalarySheet></SalarySheet>
-    )
-  }
-}
+export default () => (
+  <Provider store={store}>
+    <Player></Player>
+  </Provider>
+)
