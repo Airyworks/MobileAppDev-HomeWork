@@ -2,6 +2,7 @@ import React from 'react'
 import { View, Dimensions, Image } from 'react-native'
 import { Text, Icon, Header } from 'react-native-elements'
 import { connect } from 'react-redux'
+import { Actions as RouterActions } from 'react-native-router-flux'
 import * as Actions from '../actions'
 import Player from '../components/Player'
 import SliderBar from '../components/SliderBar'
@@ -27,6 +28,7 @@ function mapDispatchToProps (dispatch) {
     pause () { return dispatch(Actions.musicPauseAction()) },
     next () { return dispatch(Actions.nextTrackAction()) },
     prev () { return dispatch(Actions.prevTrackAction()) },
+    update (payload) { return dispatch(Actions.updateTrackAction(payload)) },
     toggleSlide (status) {
       return dispatch(status ?
         Actions.slideStartAction() : 
@@ -34,7 +36,7 @@ function mapDispatchToProps (dispatch) {
       )
     },
     setSlideTime (value) { return dispatch(Actions.setSlideTimeAction(value)) },
-    onEnd () { return dispatch(Actions.audioEndAction()) }, // maybe next track?
+    onEnd () { return dispatch(Actions.nextTrackAction()) }, // maybe next track?
     onLoad (payload) { return dispatch(Actions.audioLoadAction(payload)) },
     onLoadStart () { return dispatch(Actions.audioLoadStartAction()) },
     onProgress (payload) { return dispatch(Actions.audioProgressAction(payload)) },
@@ -61,11 +63,15 @@ export default connect (mapStateToProps, mapDispatchToProps)(
     }
 
     openPlaylist = () => {
-
+      RouterActions.playerlist()
     }
 
     mapPlayer = (component) => {
       this.player = component
+    }
+
+    redirectBack = () => {
+      RouterActions.playerlist()
     }
 
     renderSlider ({duration, currentTime, isSliding}) {
@@ -91,10 +97,11 @@ export default connect (mapStateToProps, mapDispatchToProps)(
   
     renderCover (url) {
       return ( 
-        <View style={{position: 'absolute'}}>
+        <View style={styles.coverWrap}>
           <Image
             style={styles.cover}
             source={{uri:url}}
+            resizeMode={"cover"}
           />
         </View>
       )
@@ -103,9 +110,22 @@ export default connect (mapStateToProps, mapDispatchToProps)(
     renderBackBtn () {
       return (
         <Icon
-          name="keyboard-arrow-left"
-          style={{fontSize: 36, color: "#FFF"}}
+          name="navigate-before"
+          containerStyle={{top: 5}}
+          color="#FFF"
+          onPress={this.redirectBack}
+          size={36}
+          underlayColor={styles.button.underlayColor}
         />
+      )
+    }
+
+    renderName (track) {
+      return (
+        <View styles={{}}>
+          <Text style={[styles.text, styles.name, {fontSize: 16}]}>{track.name}</Text>
+          <Text style={[styles.text, styles.name, {fontSize: 12}]}>{track.ar.map(ar => ar.name).join(', ')}</Text>
+        </View>
       )
     }
 
@@ -131,6 +151,9 @@ export default connect (mapStateToProps, mapDispatchToProps)(
         duration,
         play,
         pause,
+        prev,
+        next,
+        update,
         onEnd,
         onLoad,
         onLoadStart,
@@ -138,11 +161,11 @@ export default connect (mapStateToProps, mapDispatchToProps)(
         isSliding
       } = this.props
       const props = {
-        track, playlist, history, isPlaying, 
-        mode, currentTime, duration, play, pause,
+        track, playlist, history, isPlaying, prev, next,
+        mode, currentTime, duration, play, pause, update,
         onEnd, onLoad, onLoadStart, onProgress, isSliding
       }
-      const coverUrl = track.album.picUrl || undefined
+      const coverUrl = track.al.picUrl || undefined
       let modeIcon = ''
       switch (mode) {
         case 'repeat':
@@ -160,11 +183,16 @@ export default connect (mapStateToProps, mapDispatchToProps)(
       }
       return (
         <View>
-          <Header
-            leftComponent={{ icon: 'keyboard-arrow-left', color: '#fff' }}
-            centerComponent={{ text: track.name, style: { color: '#fff' } }}
-            outerContainerStyles={{ height: headerHeight, backgroundColor: 'transparent' }}
-          />
+          <View
+            style={styles.upper}>
+            <Header
+              leftComponent={this.renderBackBtn()}
+              centerComponent={this.renderName(track)}
+              rightComponent={<Icon name="share" color="transparent" size={36}/>} // make a placeholder
+              outerContainerStyles={{ height: headerHeight, backgroundColor: 'transparent', borderBottomWidth: 1, borderBottomColor: '#EEE5' }}
+              innerContainerStyles={{ justifyContent: 'space-between' }}
+            />
+          </View>
           <Image 
             blurRadius={10}
             style={styles.bg}
@@ -173,7 +201,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(
           <View style={styles.darkLayer}></View>
           <View style={styles.upper}>
             <View>
-              <Text>sdasd</Text>
+              {/* <Text>sdasd</Text> */}
             </View>
             {this.renderCover(coverUrl)}
           </View>
@@ -191,7 +219,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(
               />
               <Icon
                 name='skip-previous'
-                onPress={this.props.prev}
+                onPress={() => { this.props.prev(); this.props.update() } }
                 size={40}
                 containerStyle={[styles.buttonContainer]}
                 color='#FFF'
@@ -207,7 +235,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(
               />
               <Icon
                 name='skip-next'
-                onPress={this.props.next}
+                onPress={() => { this.props.next(); this.props.update() } }
                 size={40}
                 containerStyle={[styles.buttonContainer]}
                 color='#FFF'
@@ -251,11 +279,19 @@ const styles = {
   upper: {
     zIndex: 100
   },
+  coverWrap: {
+    position: 'absolute',
+    shadowColor: '#111',
+    shadowOffset: {width: 0, height: 0},
+    shadowRadius: 5,
+    elevation: 5,
+    marginHorizontal: (width - 200) / 2,
+    marginVertical: (height - 30 - 200) / 2 - headerHeight,
+  },
   cover: {
     width: 200,
     height: 200,
-    marginHorizontal: (width - 200) / 2,
-    marginVertical: (height - 30 - 200) / 2 - headerHeight
+    // borderRadius: 100
   },
   button: {
     underlayColor: '#E7E7E780'
@@ -273,6 +309,11 @@ const styles = {
   },
   text: {
     color: '#FFF'
+  },
+  name: {
+    textAlign: 'center',
+    top: 10,
+    fontSize: 16
   },
   group: {
     flexDirection: 'row',

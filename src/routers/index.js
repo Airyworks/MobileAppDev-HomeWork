@@ -3,17 +3,18 @@ import * as React from 'react'
 import { View } from 'react-native'
 
 import Player from '../pages/PlayerPage'
-import Playerlist from '../components/Playlist'
+import Playerlist from '../pages/PlaylistPage'
 
 const scenes = Actions.create(
   <Scene key='root'>
-    <Scene key='player' hideNavBar={true} component={Player} initial={true}/>
-    <Scene key='playerlist' component={Playerlist}/>
+    <Scene key='player' hideNavBar={true} component={Player} />
+    <Scene key='playerlist' hideNavBar={true} component={Playerlist} initial={true}/>
   </Scene>
 )
 
 export default () => (
   <View style={{flex: 1}}>
     <Router scenes={scenes}/>
+    {/* <Player /> */}
   </View>
 )
