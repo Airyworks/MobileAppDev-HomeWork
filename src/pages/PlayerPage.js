@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Dimensions, Image } from 'react-native'
+import { Animated, View, Dimensions, Image } from 'react-native'
 import { Text, Icon, Header } from 'react-native-elements'
 import { connect } from 'react-redux'
 import { Actions as RouterActions } from 'react-native-router-flux'
@@ -11,9 +11,9 @@ const headerHeight = 48
 
 function mapStateToProps (state) {
   return {
+    isShowing: state.player.isShowing,
     track: state.player.track,
     playlist: state.player.playlist,
-    history: state.player.history,
     isPlaying: state.player.isPlaying,
     mode: state.player.mode,
     currentTime: state.player.currentTime,
@@ -40,7 +40,9 @@ function mapDispatchToProps (dispatch) {
     onLoad (payload) { return dispatch(Actions.audioLoadAction(payload)) },
     onLoadStart () { return dispatch(Actions.audioLoadStartAction()) },
     onProgress (payload) { return dispatch(Actions.audioProgressAction(payload)) },
-    changeMode (payload) { return dispatch(Actions.changeModeAction(payload)) }
+    changeMode (payload) { return dispatch(Actions.changeModeAction(payload)) },
+    showPlayer () { return dispatch(Actions.playerShowAction()) },
+    hidePlayer () { return dispatch(Actions.playerHideAction()) }
   }
 }
 
@@ -55,6 +57,33 @@ export default connect (mapStateToProps, mapDispatchToProps)(
   class PlayerPage extends React.Component {
     constructor (props) {
       super(props)
+      this.state = {
+        left: new Animated.Value(width)
+      }
+    }
+    
+    componentWillReceiveProps (nextProps) {
+      if (nextProps.isShowing !== this.props.isShowing) {
+        if (this.props.isShowing) {
+          // hide
+          Animated.timing(
+            this.state.left,
+            {
+              toValue: width,
+              duration: 500,
+            }
+          ).start()
+        } else {
+          // show
+          Animated.timing(
+            this.state.left,
+            {
+              toValue: 0,
+              duration: 500,
+            }
+          ).start()
+        }
+      }
     }
 
     changeMode = () => {
@@ -63,7 +92,8 @@ export default connect (mapStateToProps, mapDispatchToProps)(
     }
 
     openPlaylist = () => {
-      RouterActions.playerlist()
+      // RouterActions.playerlist()
+      this.props.hidePlayer()
     }
 
     mapPlayer = (component) => {
@@ -71,7 +101,8 @@ export default connect (mapStateToProps, mapDispatchToProps)(
     }
 
     redirectBack = () => {
-      RouterActions.playerlist()
+      // RouterActions.playerlist()
+      this.props.hidePlayer()
     }
 
     renderSlider ({duration, currentTime, isSliding}) {
@@ -143,8 +174,6 @@ export default connect (mapStateToProps, mapDispatchToProps)(
     render() {
       const {
         track,
-        playlist,
-        history,
         isPlaying,
         mode,
         currentTime,
@@ -161,7 +190,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(
         isSliding
       } = this.props
       const props = {
-        track, playlist, history, isPlaying, prev, next,
+        track, isPlaying, prev, next,
         mode, currentTime, duration, play, pause, update,
         onEnd, onLoad, onLoadStart, onProgress, isSliding
       }
@@ -182,7 +211,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(
           modeIcon = 'playlist-play'
       }
       return (
-        <View>
+        <Animated.View style={{width: width, height: height, left: this.state.left, position: 'absolute', zIndex: 3, backgroundColor: '#FFF'}}>
           <View
             style={styles.upper}>
             <Header
@@ -219,7 +248,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(
               />
               <Icon
                 name='skip-previous'
-                onPress={() => { this.props.prev(); this.props.update() } }
+                onPress={() => { this.props.prev(); this.props.update(); this.props.play() } }
                 size={40}
                 containerStyle={[styles.buttonContainer]}
                 color='#FFF'
@@ -235,7 +264,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(
               />
               <Icon
                 name='skip-next'
-                onPress={() => { this.props.next(); this.props.update() } }
+                onPress={ () => { this.props.next(); this.props.update(); this.props.play() } }
                 size={40}
                 containerStyle={[styles.buttonContainer]}
                 color='#FFF'
@@ -251,7 +280,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(
               />
             </View>
           </View>
-        </View>
+        </Animated.View>
       )
     }
   }
@@ -265,11 +294,11 @@ const styles = {
     top: 0,
     width: width,
     height: height,
-    zIndex: 1,
+    zIndex: 4,
     opacity: 0.4
   },
   darkLayer: {
-    zIndex: 2, 
+    zIndex: 5, 
     position: 'absolute',
     width: width,
     height: height,

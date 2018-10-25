@@ -7,7 +7,7 @@ import Playerlist from '../pages/PlaylistPage'
 
 const scenes = Actions.create(
   <Scene key='root'>
-    <Scene key='player' hideNavBar={true} component={Player} />
+    <Scene key='player' hideNavBar={true} component={Player}/>
     <Scene key='playerlist' hideNavBar={true} component={Playerlist} initial={true}/>
   </Scene>
 )
@@ -15,6 +15,6 @@ const scenes = Actions.create(
 export default () => (
   <View style={{flex: 1}}>
     <Router scenes={scenes}/>
-    {/* <Player /> */}
+    <Player />
   </View>
 )

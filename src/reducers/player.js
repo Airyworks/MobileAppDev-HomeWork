@@ -2,10 +2,11 @@ import { handleActions } from 'redux-actions'
 import shuffle from 'shuffle-array'
 
 export const initialState = {
+  isShowing: false,
   track: {
     id: 0,
     name: '',
-    mp3Url: undefined,
+    mp3Url: 'http://localhost/A_UNREACHABLE_URL',
     lyric: '',
     isLocal: false,
     al: {
@@ -39,11 +40,14 @@ export const initialState = {
 }
 
 function* genRealList (mode, list, track) {
+  let i = 0
   switch (mode) {
     case 'repeat':
-      let i = 0
       while (true) {
-        yield list[i++]
+        const current = yield list[i++]
+        if (current && list.includes(current)) {
+          i = list.findIndex(v => v === current) + 1
+        }
         if (i >= list.length) {
           i = 0
         }
@@ -64,9 +68,13 @@ function* genRealList (mode, list, track) {
       break
     case 'serial':
     default:
-      for (let i = 0; i < list.length; i++) {
-        yield list[i]
+      while(i < list.length) {
+        const current = yield list[i++]
+        if (current && list.includes(current)) {
+          i = list.findIndex(v => v === current) + 1
+        }
       }
+    return
   }
 }
 
@@ -99,7 +107,6 @@ export default handleActions({
     return {
       ...state,
       track: next,
-      isPlaying: true,
       nextTrack: {
         track: undefined,
         isPrev: false
@@ -136,7 +143,7 @@ export default handleActions({
     }
     // call generated func and if is done set isPlaying false
     if (state.realPlaylist) {
-      const nextTrack = state.realPlaylist.next()
+      const nextTrack = state.realPlaylist.next(state.track)
       if (!nextTrack.done) {
         return {
           ...state,
@@ -149,6 +156,10 @@ export default handleActions({
     }
     return {
       ...state,
+      nextTrack: {
+        track: initialState.track,
+        isPrev: false
+      },
       isPlaying: false
     }
   },
@@ -235,6 +246,18 @@ export default handleActions({
       ...state,
       mode,
       realPlaylist: genRealList(mode, state.playlist, state.track)
+    }
+  },
+  'player-show' (state) {
+    return {
+      ...state,
+      isShowing: true
+    }
+  },
+  'player-hide' (state) {
+    return {
+      ...state,
+      isShowing: false
     }
   }
 }, initialState)

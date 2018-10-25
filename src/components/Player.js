@@ -19,8 +19,8 @@ export default class Player extends React.Component {
     MusicControl.enableControl('seekBackward', false)
     MusicControl.on('play', this.props.play)
     MusicControl.on('pause', this.props.pause)
-    MusicControl.on('nextTrack', this.props.next)
-    MusicControl.on('previousTrack', this.props.prev)
+    MusicControl.on('nextTrack', () => { this.props.next(); this.props.update(); this.props.play() })
+    MusicControl.on('previousTrack', () => { this.props.prev(); this.props.update(); this.props.play() })
   }
 
   componentWillUnmount () {
@@ -43,6 +43,7 @@ export default class Player extends React.Component {
   }
 
   render() {
+    // console.warn(this.props)
     const uri = this.props.track.mp3Url
     const paused = !this.props.isPlaying
     return (
@@ -59,7 +60,7 @@ export default class Player extends React.Component {
           playInBackground={ true }
           playWhenInactive={ true }
           ignoreSilentSwitch={'obey'}
-          onEnd={() => { this.props.next(); this.props.update() }}
+          onEnd={() => { this.props.next(); this.props.update(); this.props.play() }}
           onLoad={this.onLoad}
           onLoadStart={this.props.onLoadStart}
           onProgress={this.props.onProgress}
