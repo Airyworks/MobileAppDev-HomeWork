@@ -4,10 +4,11 @@ import { View } from 'react-native'
 
 import Player from '../pages/PlayerPage'
 import Playerlist from '../pages/PlaylistPage'
+import Library from '../pages/LibraryPage'
 
 const scenes = Actions.create(
   <Scene key='root'>
-    <Scene key='player' hideNavBar={true} component={Player}/>
+    <Scene key='library' hideNavBar={true} component={Library} />
     <Scene key='playerlist' hideNavBar={true} component={Playerlist} initial={true}/>
   </Scene>
 )

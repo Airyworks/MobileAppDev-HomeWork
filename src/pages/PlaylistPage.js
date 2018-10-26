@@ -37,7 +37,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(
     }
 
     componentDidMount () {
-      const listId = 168065148 || 122870952  
+      const listId = 109521091 || 122870952 || 168065148   
       fetch(`http://10.0.2.2:3000/playlist/detail?id=${listId}`)
         .then(response => response.json())
         .then(resJson => {
@@ -50,7 +50,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(
           this.props.updateList(tracks)
           this.setState({listName: resJson.playlist.name})
         })
-        .then(_ => {
+        .then(() => {
           this.props.next()
         })
         // .then(_ => {
@@ -64,7 +64,9 @@ export default connect (mapStateToProps, mapDispatchToProps)(
       // RouterActions.player()
     }
 
-    redirectLocalTrack = () => {}
+    redirectLocalTrack = () => {
+      RouterActions.library()
+    }
 
     renderTrack = (item) => {
       const isPlayingItem = item.item === this.props.track
@@ -108,7 +110,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(
 
     renderOpenPlayer () {
       return (<Icon 
-        name='library-music'
+        name='play-circle-filled'
         color='#fff'
         onPress={this.redirectPlayer}
         underlayColor={styles.button.underlayColor}
@@ -117,7 +119,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(
 
     render () {
       return (
-        <View style={{flex: 3, justifyContent: 'space-between', flexDirection: 'column'}}>
+        <View style={{ justifyContent: 'space-between', flexDirection: 'column'}}>
           <Header
             leftComponent={this.renderAddLocalTrack()}
             centerComponent={this.renderListName()}
@@ -125,7 +127,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(
             outerContainerStyles={{ height: headerHeight }}
           />
           <List
-            containerStyle={{marginTop: 0}}
+            style={{flex: 1}}
           >
             <FlatList
               data={this.props.playlist}

@@ -127,11 +127,12 @@ export default connect (mapStateToProps, mapDispatchToProps)(
     }
   
     renderCover (url) {
+      const noImage = require('./noImage.jpg')
       return ( 
         <View style={styles.coverWrap}>
           <Image
             style={styles.cover}
-            source={{uri:url}}
+            source={url ? {uri:url} : noImage}
             resizeMode={"cover"}
           />
         </View>

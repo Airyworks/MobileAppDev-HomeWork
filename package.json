@@ -26,7 +26,9 @@
     "redux": "^4.0.0",
     "redux-actions": "^2.6.1",
     "redux-saga": "^0.16.0",
-    "shuffle-array": "^1.0.1"
+    "rn-fetch-blob": "^0.10.13",
+    "shuffle-array": "^1.0.1",
+    "unique-id-generator": "^1.0.1"
   },
   "devDependencies": {
     "babel-jest": "23.6.0",

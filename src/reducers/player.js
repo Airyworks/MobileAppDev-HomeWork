@@ -55,14 +55,14 @@ function* genRealList (mode, list, track) {
       break
     case 'repeat-one':
       while (true) {
-        yield track
+        const _ = yield track
       }
       break
     case 'shuffle':
       while (true) {
         const rand = shuffle(list, {copy: true})
         for (let i = 0; i < rand.length; i++) {
-          yield rand[i]
+          const _ = yield rand[i]
         }
       }
       break
@@ -100,7 +100,7 @@ export default handleActions({
     } else {
       next = payload
     }
-    let history = state.history
+    let history = Array.from(state.history)
     if (history.length === 0 || saveToHistory) {
       history.push(next)
     }
@@ -165,7 +165,7 @@ export default handleActions({
   },
   'player-prev' (state) {
     // console.warn(state.offset, state.history.map(i=>i.name))
-    const history = state.history
+    const history = Array.from(state.history)
     if (history.length <= 1) {
       return {
         ...state,
