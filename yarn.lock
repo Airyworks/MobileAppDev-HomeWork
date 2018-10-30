@@ -3184,10 +3184,6 @@ jsprim@^1.2.2:
     json-schema "0.2.3"
     verror "1.10.0"
 
-keymirror@0.1.1:
-  version "0.1.1"
-  resolved "http://registry.npm.taobao.org/keymirror/download/keymirror-0.1.1.tgz#918889ea13f8d0a42e7c557250eee713adc95c35"
-
 kind-of@^1.1.0:
   version "1.1.0"
   resolved "http://registry.npm.taobao.org/kind-of/download/kind-of-1.1.0.tgz#140a3d2d41a36d2efcfa9377b62c24f8495a5c44"
@@ -4333,10 +4329,6 @@ react-native-elements@^0.19.1:
     opencollective "^1.0.3"
     prop-types "^15.5.8"
 
-react-native-music-control@^0.7.3:
-  version "0.7.3"
-  resolved "http://registry.npm.taobao.org/react-native-music-control/download/react-native-music-control-0.7.3.tgz#6ba41e7339ea4e7afedb8ec4659bebfd66d556d9"
-
 react-native-router-flux@^4.0.5:
   version "4.0.5"
   resolved "http://registry.npm.taobao.org/react-native-router-flux/download/react-native-router-flux-4.0.5.tgz#573dd677c22762f5e8d15ed72f177a1256ff7988"
@@ -4380,13 +4372,6 @@ react-native-vector-icons@^5.0.0:
     lodash "^4.0.0"
     prop-types "^15.5.10"
     yargs "^8.0.2"
-
-react-native-video@^3.2.1:
-  version "3.2.1"
-  resolved "http://registry.npm.taobao.org/react-native-video/download/react-native-video-3.2.1.tgz#7ba3cbdfc5c747b5b00452811e98193824b16ce3"
-  dependencies:
-    keymirror "0.1.1"
-    prop-types "^15.5.10"
 
 react-native@^0.57.1:
   version "0.57.1"
