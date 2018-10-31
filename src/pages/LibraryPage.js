@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import { Actions as RouterActions } from 'react-native-router-flux'
 import idGenerator from 'unique-id-generator'
 import * as Actions from '../actions'
-import Player from '../components/Player'
 import SliderBar from '../components/SliderBar'
 const { width, height } = Dimensions.get('window')
 const headerHeight = 48

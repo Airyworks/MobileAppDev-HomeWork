@@ -3277,13 +3277,13 @@ lodash.curry@^4.1.1:
   version "4.1.1"
   resolved "http://registry.npm.taobao.org/lodash.curry/download/lodash.curry-4.1.1.tgz#248e36072ede906501d75966200a86dab8b23170"
 
-lodash.isempty@^4.4.0:
-  version "4.4.0"
-  resolved "http://registry.npm.taobao.org/lodash.isempty/download/lodash.isempty-4.4.0.tgz#6f86cbedd8be4ec987be9aaf33c9684db1b31e7e"
-
 lodash.isequal@4.5.0:
   version "4.5.0"
   resolved "http://registry.npm.taobao.org/lodash.isequal/download/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
+
+lodash.merge@^4.6.1:
+  version "4.6.1"
+  resolved "http://registry.npm.taobao.org/lodash.merge/download/lodash.merge-4.6.1.tgz#adc25d9cb99b9391c59624f379fbba60d7111d54"
 
 lodash.pad@^4.1.0:
   version "4.5.1"
@@ -3941,6 +3941,10 @@ onetime@^2.0.0:
   dependencies:
     mimic-fn "^1.0.0"
 
+opencollective-postinstall@^2.0.0:
+  version "2.0.1"
+  resolved "http://registry.npm.taobao.org/opencollective-postinstall/download/opencollective-postinstall-2.0.1.tgz#798e83e168f7b91949061c2683f762af747f17cc"
+
 opencollective@^1.0.3:
   version "1.0.3"
   resolved "http://registry.npm.taobao.org/opencollective/download/opencollective-1.0.3.tgz#aee6372bc28144583690c3ca8daecfc120dd0ef1"
@@ -4320,13 +4324,13 @@ react-native-drawer-layout@1.3.2:
   dependencies:
     react-native-dismiss-keyboard "1.0.0"
 
-react-native-elements@^0.19.1:
-  version "0.19.1"
-  resolved "http://registry.npm.taobao.org/react-native-elements/download/react-native-elements-0.19.1.tgz#f92b69d864a150215d01f81fe3c52a9cada83e45"
+react-native-elements@^1.0.0-beta7:
+  version "1.0.0-beta7"
+  resolved "http://registry.npm.taobao.org/react-native-elements/download/react-native-elements-1.0.0-beta7.tgz#d732affc905079033a8b53343587f7c1dbc59834"
   dependencies:
-    lodash.isempty "^4.4.0"
+    lodash.merge "^4.6.1"
     lodash.times "^4.3.2"
-    opencollective "^1.0.3"
+    opencollective-postinstall "^2.0.0"
     prop-types "^15.5.8"
 
 react-native-router-flux@^4.0.5:
