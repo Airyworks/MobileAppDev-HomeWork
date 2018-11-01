@@ -7,7 +7,7 @@ import { Actions as RouterActions } from 'react-native-router-flux'
 import idGenerator from 'unique-id-generator'
 import * as Actions from '../actions'
 import SliderBar from '../components/SliderBar'
-import EmojiBackground from '../components/emoji-background'
+import EmojiBackground from '../components/EmojiBackground'
 
 const { width, height } = Dimensions.get('window')
 const headerHeight = 48

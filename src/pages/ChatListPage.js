@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import { View, Dimensions, ScrollView, FlatList, Alert } from 'react-native'
 import { Avatar, ListItem } from 'react-native-elements'
 import { Actions as RouterActions } from 'react-native-router-flux'
-import EmojiBackground from '../components/emoji-background'
+import EmojiBackground from '../components/EmojiBackground'
 import * as Actions from '../actions'
 
 const {width, height} = Dimensions.get('window')

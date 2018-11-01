@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import { View, Dimensions, Animated, FlatList, ScrollView, Alert, Keyboard } from 'react-native'
 import { Avatar, ListItem, Input } from 'react-native-elements'
 import { Actions as RouterActions } from 'react-native-router-flux'
-import EmojiBackground from '../components/emoji-background'
+import EmojiBackground from '../components/EmojiBackground'
 import Bubble from '../components/Bubble'
 import * as Actions from '../actions'
 
