@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { View, Dimensions, ScrollView, Alert, FlatList } from 'react-native'
 import { Avatar, ListItem } from 'react-native-elements'
-import EmojiBackground from '../components/emoji-background'
+import EmojiBackground from '../components/EmojiBackground'
 import { Actions as RouterActions } from 'react-native-router-flux'
 import * as Actions from '../actions'
 
