@@ -1,18 +1,16 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Icon from 'react-native-vector-icons/FontAwesome'
-import { View, Dimensions, ScrollView, FlatList, Alert } from 'react-native'
+import { View, Dimensions, ScrollView, Alert, FlatList } from 'react-native'
 import { Avatar, ListItem } from 'react-native-elements'
-import { Actions as RouterActions } from 'react-native-router-flux'
 import EmojiBackground from '../components/emoji-background'
+import { Actions as RouterActions } from 'react-native-router-flux'
 import * as Actions from '../actions'
 
 const {width, height} = Dimensions.get('window')
 
 function mapStateToProps (state) {
   return {
-    chatList: state.main.chatList,
-    account: state.main.account
+    friendList: state.main.friendList
   }
 }
 
@@ -23,7 +21,7 @@ function mapDispatchToProps (dispatch) {
 }
 
 export default connect (mapStateToProps, mapDispatchToProps)(
-  class ChatListPage extends React.Component {
+  class FriendListPage extends React.Component {
     constructor (props) {
       super(props)
       this.state = {}     // do not use redux because of simplifying
@@ -40,50 +38,44 @@ export default connect (mapStateToProps, mapDispatchToProps)(
       )
     }
 
-    renderChat = (item) => {
+    renderFriend = (item) => {
       item = item.item
-      // Alert.alert(typeof this.props.account)
-      
-      let name = ''
-      let avatar = ''
-      if (item.users.length <= 2) {
-        for (let i = 0; i < item.users.length; i++) {
-          if (item.users[i].id !== this.props.account.id) {
-            name = item.users[i].name
-            avatar = item.users[i].avatar
-          }
-        }
-      } else {
-        const nameArr = []
-        for (let i = 0; i < chat.users.length; i++) {
-          nameArr.push(item.users[i].name)
-          avatar = item.users[i].avatar
-        }
-        name = nameArr.join('、')
-      }
-
       return (
         <ListItem
-          leftAvatar={this.renderAvatar(avatar)}
-          title={name}
-          subtitle={item.last}
+          leftAvatar={this.renderAvatar(item.avatar)}
+          title={item.name}
           containerStyle={styles.listItem}
           onPress={() => {
-            // Alert.alert(`go to chat ${l.name}`)
-            RouterActions.chat()
+            // Alert.alert(`start chat ${l.name}`)
           }}
         />
       )
     }
 
-
     render () {
+
       return (
-        <EmojiBackground style={{flexDirection: 'column'}}>
+        // <ScrollView style={{ flexDirection: 'column'}}>
+        //   {
+        //     list.map((l, i) => (
+        //       <ListItem
+        //         key={i}
+        //         leftAvatar={this.renderAvatar(l.avatar_url)}
+        //         title={l.name}
+        //         containerStyle={styles.listItem}
+        //         onPress={() => {
+        //           // Alert.alert(`start chat ${l.name}`)
+                  
+        //         }}
+        //       />
+        //     ))
+        //   }
+        // </ScrollView>
+        <EmojiBackground>
           <View style={{height: height - 130}}>
             <FlatList
-              data={this.props.chatList}
-              renderItem={this.renderChat}
+              data={this.props.friendList}
+              renderItem={this.renderFriend}
               keyExtractor={(item) => item.name}
             />
           </View>

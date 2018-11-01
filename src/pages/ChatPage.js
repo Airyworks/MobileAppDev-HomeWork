@@ -10,7 +10,22 @@ import * as Actions from '../actions'
 
 const {width, height} = Dimensions.get('window')
 
-export default connect ()(
+function mapStateToProps (state) {
+  return {
+    account: state.main.account,
+    friendList: state.main.friendList,
+    openname: state.chat.openname,
+    chats: state.chat.chats
+  }
+}
+
+function mapDispatchToProps (dispatch) {
+  return {
+    // play () { return dispatch(Actions.musicPlayAction()) }
+  }
+}
+
+export default connect (mapStateToProps, mapDispatchToProps)(
   class ChatPage extends React.Component {
     constructor (props) {
       super(props)
@@ -52,18 +67,25 @@ export default connect ()(
       ).start()
     }
 
+    getFriendById = (id) => {
+      if (this.props.account.id === id) return this.props.account
+      for (let friend of this.props.friendList) {
+        if (friend.id === id) {
+          return friend
+        }
+      }
+      return null
+    }
+
     renderBubble = (item) => {
       item = item.item
+      const friend = this.getFriendById(item.from)
 
       return(
         <Bubble
-          right={item.from === this.state.selfUserId}
+          right={item.from === this.props.account.id}
           text={item.content}
-          avatar={
-            item.from === this.state.selfUserId
-            ? 'https://user-images.githubusercontent.com/9587680/47803553-b99c4480-dd6d-11e8-8299-de4ddd091e1a.png'
-            : 'https://user-images.githubusercontent.com/9587680/47803551-b903ae00-dd6d-11e8-8dd8-e0ea57fc32fb.jpg'
-          }
+          avatar={friend.avatar}
         />
       )
     }
@@ -79,87 +101,39 @@ export default connect ()(
     }
 
     render () {
-
-      const history = [
-        {
-          "uuid": 'abc',
-          "from": 0,
-          "toChannel": 'def',
-          "content": '你好',
-          "time": new Date('2018-10-31 18:00:20').getTime()
-        },
-        {
-          "uuid": 'abc',
-          "from": 1,
-          "toChannel": 'def',
-          "content": '你好，亲爱的！',
-          "time": new Date('2018-10-31 18:01:01').getTime()
-        },
-        {
-          "uuid": 'abc',
-          "from": 0,
-          "toChannel": 'def',
-          "content": '最近和日本的生意谈的怎么样了，有没有问他们要一些特产动作片？',
-          "time": new Date('2018-10-31 18:03:45').getTime()
-        },
-        {
-          "uuid": 'abc',
-          "from": 1,
-          "toChannel": 'def',
-          "content": '很顺利，还送了他们两只熊猫。动作片是什么特产，请注意你的言辞。',
-          "time": new Date('2018-10-31 18:05:37').getTime()
-        },
-        {
-          "uuid": 'abc',
-          "from": 0,
-          "toChannel": 'def',
-          "content": '那是真的牛皮',
-          "time": new Date('2018-10-31 18:07:21').getTime()
-        },
-        {
-          "uuid": 'abc',
-          "from": 1,
-          "toChannel": 'def',
-          "content": '最近感觉头上越来越凉了',
-          "time": new Date('2018-10-31 18:10:53').getTime()
-        },
-        {
-          "uuid": 'abc',
-          "from": 0,
-          "toChannel": 'def',
-          "content": '霸王洗发水，我用了大概一个月左右，感觉还不错，后来我在拍的时候也要求他们不要加特技，因为我要让观众看到，我用完之后是这个样子，你们用完之后也会是这个样子！',
-          "time": new Date('2018-10-31 18:12:24').getTime()
-        },
-        {
-          "uuid": 'abc',
-          "from": 1,
-          "toChannel": 'def',
-          "content": 'Duang!',
-          "time": new Date('2018-10-31 18:15:44').getTime()
-        },
-        {
-          "uuid": 'abc',
-          "from": 1,
-          "toChannel": 'def',
-          "content": 'Duang!',
-          "time": new Date('2018-10-31 18:15:45').getTime()
-        },
-        {
-          "uuid": 'abc',
-          "from": 1,
-          "toChannel": 'def',
-          "content": 'Duang!',
-          "time": new Date('2018-10-31 18:15:46').getTime()
+      let openchat = {
+        name: '',
+        history: []
+      }
+      for (let chat of this.props.chats) {
+        if (chat.name === this.props.openname) {
+          openchat = chat
         }
-      ]
+      }
 
       return (
         <EmojiBackground>
+          {/* <Animated.ScrollView style={{ height: this.state.historyHeight }}>
+            {
+            openchat.history.map((l, i) => {
+              const friend = this.getFriendById(l.from)
+              return (
+                <Bubble
+                  key={i}
+                  right={l.from === this.props.account.id}
+                  text={l.content}
+                  avatar={friend.avatar}
+                />
+              )
+            })
+            }
+          </Animated.ScrollView> */}
           <Animated.View style={{height: this.state.historyHeight}}>
             <FlatList
-              data={history}
+              data={openchat.history.reverse()}
               renderItem={this.renderBubble}
               keyExtractor={item => item.time.toString()}
+              inverted={true}
             />
           </Animated.View>
           {this.renderInput()}

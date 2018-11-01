@@ -26,6 +26,7 @@
     "redux-saga": "^0.16.0",
     "rn-fetch-blob": "^0.10.13",
     "shuffle-array": "^1.0.1",
+    "socket.io-client": "^2.1.1",
     "unique-id-generator": "^1.0.1"
   },
   "devDependencies": {

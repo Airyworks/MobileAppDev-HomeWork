@@ -6,14 +6,14 @@ import { View } from 'react-native'
 import Login from '../pages/LoginPage'
 import Header from '../components/Header'
 import ChatHeader from '../components/ChatHeader'
-import FriendList from '../pages/FriendList'
+import FriendList from '../pages/FriendListPage'
 import ChatList from '../pages/ChatListPage'
 import Chat from '../pages/ChatPage'
 
 const scenes = Actions.create(
   <Scene key='root'>
     <Scene key='login' hideNavBar component={Login}/>
-    <Tabs key="main" navBar={Header}>
+    <Tabs key="main" navBar={Header} initial>
       <Scene key='chatlist'
             tabBarLabel='chat'
             icon={ () => (
@@ -35,9 +35,10 @@ const scenes = Actions.create(
               />
             )}
             hideNavBar
-            component={FriendList}/>
+            component={FriendList}
+            />
     </Tabs>
-    <Scene key='chat' navBar={ChatHeader} component={Chat} initial/>
+    <Scene key='chat' navBar={ChatHeader} component={Chat}/>
   </Scene>
 )
 
