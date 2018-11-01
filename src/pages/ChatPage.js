@@ -1,8 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import { View, Dimensions, Image, FlatList, ScrollView } from 'react-native'
-import { Avatar, ListItem } from 'react-native-elements'
+import { View, Dimensions, Animated, FlatList, ScrollView, Alert, Keyboard } from 'react-native'
+import { Avatar, ListItem, Input } from 'react-native-elements'
 import { Actions as RouterActions } from 'react-native-router-flux'
 import EmojiBackground from '../components/emoji-background'
 import Bubble from '../components/Bubble'
@@ -14,11 +14,71 @@ export default connect ()(
   class ChatPage extends React.Component {
     constructor (props) {
       super(props)
-      this.state = {}
+      this.state = {
+        selfUserId: 0,
+        historyHeight: new Animated.Value(height - 140)
+      }
+    }
+
+    componentDidMount () {
+      const self = this
+      this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', (e) => {this._keyboardDidShow(e, self)})
+      this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', (e) => {this._keyboardDidHide(e, self)})
+    }
+  
+    componentWillUnmount () {
+      this.keyboardDidShowListener.remove()
+      this.keyboardDidHideListener.remove()
+    }
+
+    _keyboardDidShow (e, self) {
+      // Alert.alert(e.endCoordinates.height.toString())
+      Animated.timing(
+        self.state.historyHeight,
+        {
+          toValue: height - 140 - e.endCoordinates.height,
+          duration: 200
+        }
+      ).start()
+    }
+  
+    _keyboardDidHide (e, self) {
+      Animated.timing(
+        self.state.historyHeight,
+        {
+          toValue: height - 140,
+          duration: 200
+        }
+      ).start()
+    }
+
+    renderBubble = (item) => {
+      item = item.item
+
+      return(
+        <Bubble
+          right={item.from === this.state.selfUserId}
+          text={item.content}
+          avatar={
+            item.from === this.state.selfUserId
+            ? 'https://user-images.githubusercontent.com/9587680/47803553-b99c4480-dd6d-11e8-8299-de4ddd091e1a.png'
+            : 'https://user-images.githubusercontent.com/9587680/47803551-b903ae00-dd6d-11e8-8dd8-e0ea57fc32fb.jpg'
+          }
+        />
+      )
+    }
+
+    renderInput = () => {
+      return (
+        <View>
+          <Input
+            containerStyle={styles.containerStyle}
+            inputContainerStyle={styles.inputContainerStyle}/>
+        </View>
+      )
     }
 
     render () {
-      const selfUserId = 0
 
       const history = [
         {
@@ -76,28 +136,34 @@ export default connect ()(
           "toChannel": 'def',
           "content": 'Duang!',
           "time": new Date('2018-10-31 18:15:44').getTime()
+        },
+        {
+          "uuid": 'abc',
+          "from": 1,
+          "toChannel": 'def',
+          "content": 'Duang!',
+          "time": new Date('2018-10-31 18:15:45').getTime()
+        },
+        {
+          "uuid": 'abc',
+          "from": 1,
+          "toChannel": 'def',
+          "content": 'Duang!',
+          "time": new Date('2018-10-31 18:15:46').getTime()
         }
       ]
 
       return (
-        // <EmojiBackground>
-          <ScrollView style={{ height }}>
-            {
-            history.map((l, i) => (
-              <Bubble
-                key={i}
-                right={l.from === selfUserId}
-                text={l.content}
-                avatar={
-                  l.from === selfUserId
-                  ? 'https://user-images.githubusercontent.com/9587680/47803553-b99c4480-dd6d-11e8-8299-de4ddd091e1a.png'
-                  : 'https://user-images.githubusercontent.com/9587680/47803551-b903ae00-dd6d-11e8-8dd8-e0ea57fc32fb.jpg'
-                }
-              />
-            ))
-            }
-          </ScrollView>
-        // </EmojiBackground>
+        <EmojiBackground>
+          <Animated.View style={{height: this.state.historyHeight}}>
+            <FlatList
+              data={history}
+              renderItem={this.renderBubble}
+              keyExtractor={item => item.time.toString()}
+            />
+          </Animated.View>
+          {this.renderInput()}
+        </EmojiBackground>
       )
     }
   }
@@ -110,5 +176,15 @@ const styles = {
   },
   button: {
     underlayColor: '#E7E7E780'
+  },
+  containerStyle: {
+    backgroundColor: '#fff',
+    width,
+    padding: 5
+  },
+  inputContainerStyle: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 4
   }
 }
