@@ -3,7 +3,7 @@ import Icon from 'react-native-vector-icons/FontAwesome'
 import * as React from 'react'
 import { View } from 'react-native'
 
-import Socket from '../components/Socket'
+import socket from '../Socket'
 import Login from '../pages/LoginPage'
 import Header from '../components/Header'
 import ChatHeader from '../components/ChatHeader'
@@ -46,7 +46,6 @@ const scenes = Actions.create(
 
 export default () => (
   <View style={{flex: 1}}>
-    <Socket/>
     <Router scenes={scenes}/>
   </View>
 )

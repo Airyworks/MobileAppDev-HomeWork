@@ -87,5 +87,43 @@ export default handleActions({
       ...state,
       isPlaying: true
     }
+  },
+  /*
+    Here are websocket events
+  */
+  'ws-hi' (state, {payload}) {
+    return {
+      ...state
+    }
+  },
+  'ws-new-chat-res' (state, {payload}) {
+    return {
+      ...state
+    }
+  },
+  'ws-pull-message' (state, {payload}) {
+    return {
+      ...state
+    }
+  },
+  'ws-server-received' (state, {payload}) {
+    return {
+      ...state
+    }
+  },
+  'ws-forbidden' (state) {
+    return {
+      ...state
+    }
+  },
+  'ws-invalid-param' (state) {
+    return {
+      ...state
+    }
+  },
+  'ws-token-missing' (state) {
+    return {
+      ...state
+    }
   }
 }, initialState)

@@ -18,4 +18,13 @@ export const updateTrackAction = createAction('player-update-track')
 export const updatePlaylistAction = createAction('player-update-playlist')
 export const playerShowAction = createAction('player-show')
 export const playerHideAction = createAction('player-hide')
+
 export const updateToken = createAction('update-token')
+
+export const WSHiAction = createAction('ws-hi')
+export const WSNewChatResAction = createAction('ws-new-chat-res')
+export const WSPullMessageAction = createAction('ws-pull-message')
+export const WSServerReceivedAction = createAction('ws-server-received')
+export const WSForbiddenAction = createAction('ws-forbidden')
+export const WSInvalidParamAction = createAction('ws-invalid-param')
+export const WSTokenMissingAction = createAction('ws-token-missing')
