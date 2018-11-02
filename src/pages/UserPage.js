@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { View, Dimensions, ScrollView, Alert, FlatList } from 'react-native'
+import { View, Dimensions, Alert } from 'react-native'
 import { Avatar, ListItem, Button } from 'react-native-elements'
 import EmojiBackground from '../components/EmojiBackground'
 import { Actions as RouterActions } from 'react-native-router-flux'
@@ -27,15 +27,8 @@ export default connect (mapStateToProps, mapDispatchToProps)(
       this.state = {}     // do not use redux because of simplifying
     }
 
-    renderAvatar = (uri) => {
-      return (
-        <Avatar
-          size="small"
-          rounded
-          source={{uri}}
-          activeOpacity={0.7}
-        />
-      )
+    logout = () => {
+      Alert.alert('Logout')
     }
 
     render () {
@@ -49,8 +42,10 @@ export default connect (mapStateToProps, mapDispatchToProps)(
               subtitle={`user id: ${this.props.account.id}`}
             />
             <ListItem
+              titleStyle={styles.button}
               containerStyle={styles.exit}
               title={'Logout'}
+              onPress={this.logout}
             />
           </View>
         </EmojiBackground>
@@ -69,6 +64,11 @@ const styles = {
     borderBottomWidth: 1
   },
   exit: {
-    marginTop: 15
+    marginTop: 15,
+    backgroundColor: '#db0b24'
+  },
+  button: {
+    textAlign: 'center',
+    color: '#fff'
   }
 }

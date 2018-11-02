@@ -92,7 +92,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(
       AsyncStorage.getItem(`${id}`)
       .then((resStr) => {
         if (resStr) {
-          const res = JSON.parse(resStr)
+          const res = JSON.parse(resStr) 
           this.props.updateChat(res.chats)
           this.props.updateChatList(res.chatList)
         }

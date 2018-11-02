@@ -185,7 +185,8 @@ socket.on('pull-message', (data) => {
   socket.clientReceived({uuids})
   
   const state = store.getState()
-  AsyncStorage.setItem(`${state.main.id}`, JSON.stringify({
+
+  AsyncStorage.setItem(`${state.main.account.id}`, JSON.stringify({
     chats: state.chat.chats,
     chatList: state.main.chatList
   }))

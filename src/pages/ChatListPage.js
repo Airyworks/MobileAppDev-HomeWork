@@ -69,6 +69,14 @@ export default connect (mapStateToProps, mapDispatchToProps)(
       )
     }
 
+    renderUnread = () => {
+      return (
+        <View
+          style={styles.unread}
+        />
+      )
+    }
+
     renderChat = (item) => {
       item = item.item
       // Alert.alert(typeof this.props.account)
@@ -97,6 +105,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(
           title={name}
           subtitle={item.last}
           containerStyle={styles.listItem}
+          rightIcon={this.renderUnread()}
           onPress={() => {
             // Alert.alert(`go to chat ${l.name}`)
             this.props.openChat(item.name)
@@ -135,5 +144,11 @@ const styles = {
     backgroundColor: 'rgba(255, 255, 255, 0.6)',
     borderBottomColor: 'rgba(150, 150, 150, 0.4)',
     borderBottomWidth: 1
+  },
+  unread: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: '#db0b24'
   }
 }

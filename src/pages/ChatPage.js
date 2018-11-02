@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { View, Dimensions, Animated, FlatList, ScrollView, Alert, Keyboard } from 'react-native'
+import { View, Dimensions, Animated, FlatList, AsyncStorage, Alert, Keyboard } from 'react-native'
 import { Avatar, ListItem, Icon, Input } from 'react-native-elements'
 import { Actions as RouterActions } from 'react-native-router-flux'
 import EmojiBackground from '../components/EmojiBackground'
@@ -15,7 +15,8 @@ function mapStateToProps (state) {
     account: state.main.account,
     friendList: state.main.friendList,
     openname: state.chat.openname,
-    chats: state.chat.chats
+    chats: state.chat.chats,
+    chatList: state.main.chatList
   }
 }
 
@@ -112,6 +113,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(
         content: msg
       }).then(data => {
         this.setState({input: ''})
+
         this.props.addMessage({
           uuid: Math.ceil(new Date(data.time).getTime() / 1000),
           isRead: true,
@@ -119,6 +121,14 @@ export default connect (mapStateToProps, mapDispatchToProps)(
           time: new Date(data.time).getTime(),
           content: msg,
           channel: channel
+        })
+
+        AsyncStorage.setItem(`${this.props.account.id}`, JSON.stringify({
+          chats: this.props.chats,
+          chatList: this.props.chatList
+        }))
+        .catch(err => {
+          console.error(err)
         })
       }).catch(_ => {
         Alert.alert(`Network error`, 'please resend message')
@@ -164,6 +174,8 @@ export default connect (mapStateToProps, mapDispatchToProps)(
           openchat = chat
         }
       }
+
+      openchat.history.sort((a, b) => a.time - b.time)
 
       return (
         <EmojiBackground>
