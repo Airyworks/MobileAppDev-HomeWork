@@ -11,8 +11,7 @@ export default handleActions({
       const chats = Array.from(state.chats)
       chats.unshift({
         name: payload,
-        history: [],
-        users: [state.main.account]
+        history: []
       })
       return {
         ...state,
@@ -27,8 +26,8 @@ export default handleActions({
     }
   },
   'pull-message' (state, {payload}) {
-    const userId = state.main.account.id
-    const msgs = payload.map(i => ({
+    const {messages, userId} = payload
+    const msgs = messages.map(i => ({
         uuid: i.uuids.find(x => x.user === userId).uuid,
         isRead: false,
         sender: i.sender,
@@ -43,8 +42,7 @@ export default handleActions({
       if (!chats.find(v => v.name === channel)) {
         chats.push({
           name: channel,
-          history: [i],
-          users: [state.main.account, i.sender]
+          history: [i]
         })
       } else {
         chats.find(v => v.name === channel).history.push(i)

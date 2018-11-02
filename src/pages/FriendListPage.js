@@ -12,7 +12,7 @@ const {width, height} = Dimensions.get('window')
 
 function mapStateToProps (state) {
   return {
-    userId: state.main.account,
+    user: state.main.account,
     friendList: state.main.friendList
   }
 }

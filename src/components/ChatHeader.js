@@ -57,7 +57,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(
         <Header
           placement="center"
           backgroundColor="#ccc"
-          leftComponent={{ icon: 'arrow-back', color: '#444', onPress: RouterActions.chatlist }}
+          leftComponent={{ icon: 'arrow-back', color: '#444', onPress: RouterActions.pop }}
           centerComponent={{ text: title, style: { color: '#222', fontSize: 18 } }}
           containerStyle={{paddingTop: 10, height: 60}}
         />

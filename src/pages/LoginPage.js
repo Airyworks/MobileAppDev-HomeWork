@@ -71,12 +71,12 @@ export default connect (mapStateToProps, mapDispatchToProps)(
         }
       }).then(res => {
         if (res) {
-          this.props.updateUser(res.token)
+          this.props.updateToken(res.token)
           this.reloadRedux(res.id)
           socket.open().then(() => {
             socket.hello({token: res.token})
+            RouterActions.main()
           })
-          RouterActions.main()
         }
       })
       .catch(err => {
@@ -94,7 +94,6 @@ export default connect (mapStateToProps, mapDispatchToProps)(
           this.props.updateChat(res.chats)
           this.props.updateChatList(res.chatList)
         }
-        RouterActions.main()
       })
       .catch(err => {
         console.error(err)
