@@ -1,8 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { View, Dimensions, Alert } from 'react-native'
-import { Avatar, ListItem, Button } from 'react-native-elements'
+import { Avatar, ListItem } from 'react-native-elements'
 import EmojiBackground from '../components/EmojiBackground'
+import Button from '../components/Button'
 import { Actions as RouterActions } from 'react-native-router-flux'
 import * as Actions from '../actions'
 
@@ -28,7 +29,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(
     }
 
     logout = () => {
-      Alert.alert('Logout')
+      RouterActions.login()
     }
 
     render () {
@@ -41,12 +42,13 @@ export default connect (mapStateToProps, mapDispatchToProps)(
               title={this.props.account.name}
               subtitle={`user id: ${this.props.account.id}`}
             />
-            <ListItem
-              titleStyle={styles.button}
-              containerStyle={styles.exit}
-              title={'Logout'}
+            <Button
+              text="Logout"
+              textStyle={styles.buttonText}
+              containerStyle={styles.exitContainer}
+              innerStyle={styles.exit}
               onPress={this.logout}
-            />
+            ></Button>
           </View>
         </EmojiBackground>
       )
@@ -63,11 +65,13 @@ const styles = {
     borderBottomColor: 'rgba(150, 150, 150, 0.4)',
     borderBottomWidth: 1
   },
+  exitContainer: {
+    marginTop: 15
+  },
   exit: {
-    marginTop: 15,
     backgroundColor: '#db0b24'
   },
-  button: {
+  buttonText: {
     textAlign: 'center',
     color: '#fff'
   }

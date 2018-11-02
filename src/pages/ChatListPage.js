@@ -14,6 +14,7 @@ const {width, height} = Dimensions.get('window')
 function mapStateToProps (state) {
   return {
     chatList: state.main.chatList,
+    chats: state.chat.chats,
     account: state.main.account
   }
 }
@@ -69,12 +70,17 @@ export default connect (mapStateToProps, mapDispatchToProps)(
       )
     }
 
-    renderUnread = () => {
-      return (
-        <View
-          style={styles.unread}
-        />
-      )
+    renderUnread = (chat) => {
+      if (chat) {
+        const unread = chat.history.filter(i => i.isRead === false)
+        if (unread.length > 0) {
+          return (
+            <View
+              style={styles.unread}
+            />
+          )
+        }
+      }
     }
 
     renderChat = (item) => {
@@ -99,13 +105,15 @@ export default connect (mapStateToProps, mapDispatchToProps)(
         name = nameArr.join('、')
       }
 
+      const chat = this.props.chats.find(i => i.name === item.name)
+
       return (
         <ListItem
           leftAvatar={this.renderAvatar(avatar)}
           title={name}
           subtitle={item.last}
           containerStyle={styles.listItem}
-          rightIcon={this.renderUnread()}
+          rightIcon={this.renderUnread(chat)}
           onPress={() => {
             // Alert.alert(`go to chat ${l.name}`)
             this.props.openChat(item.name)

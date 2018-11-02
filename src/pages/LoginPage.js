@@ -1,13 +1,14 @@
 import React from 'react'
 import { AsyncStorage, View, Dimensions, Alert } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import { Input, Button } from 'react-native-elements'
+import { Input, ListItem } from 'react-native-elements'
 import { connect } from 'react-redux'
 import { Actions as RouterActions } from 'react-native-router-flux'
 import idGenerator from 'unique-id-generator'
 import * as Actions from '../actions'
 import SliderBar from '../components/SliderBar'
 import EmojiBackground from '../components/EmojiBackground'
+import Button from '../components/Button'
 import md5 from 'md5'
 import socket from '../Socket'
 
@@ -132,7 +133,14 @@ export default connect (mapStateToProps, mapDispatchToProps)(
               />
             }
           />
+          
           <Button
+            text="Login"
+            titleStyle={styles.buttonTextStyle}
+            innerStyle={styles.button}
+            onPress={this.login}
+          ></Button>
+          {/* <Button
             containerStyle={[styles.button, {padding: 0}]}
             inputContainerStyle={[styles.button, {padding: 0}]}
             buttonStyle={styles.buttonStyle}
@@ -141,7 +149,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(
             color='#CCC'
             title='login'
             onPress={this.login}
-          />
+          /> */}
           {/* <Button style={styles.button} title="login"></Button> */}
         </View>
       )
@@ -184,8 +192,7 @@ const styles = {title: {
     width: width * 2 / 3,
     height: 50,
     borderRadius: 25,
-    marginBottom: 25,
-    backgroundColor: 'rgb(255, 255, 255)'
+    marginBottom: 25
   },
   buttonStyle: {
     width: '100%',
