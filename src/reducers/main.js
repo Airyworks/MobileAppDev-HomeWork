@@ -76,7 +76,7 @@ export const initialState = {
 }
 
 export default handleActions({
-  'update-token' (state, {payload}) {
+  'update-user' (state, {payload}) {
     return {
       ...state,
       token: payload
