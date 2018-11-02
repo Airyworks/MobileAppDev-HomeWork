@@ -18,6 +18,12 @@ export default handleActions({
       token: payload
     }
   },
+  'update-user' (state, {payload}) {
+    return {
+      ...state,
+      account: payload
+    }
+  },
   'update-friends' (state, {payload}) {
     return {
       ...state,

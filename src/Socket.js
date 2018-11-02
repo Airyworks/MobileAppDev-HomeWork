@@ -1,5 +1,5 @@
 import * as Actions from './actions'
-import store from './store'
+import { store } from './store'
 import io from 'socket.io-client'
 import config from '../config'
 
@@ -170,4 +170,13 @@ class Socket {
   }
 }
 
-export default new Socket()
+const socket = new Socket()
+
+socket.on('pull-message', (data) => {
+  store.dispatch(Actions.PullMessageAction({
+    ...data,
+    userId: store.getState().main.account.id
+  }))
+})
+
+export default socket

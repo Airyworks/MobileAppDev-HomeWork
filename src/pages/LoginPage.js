@@ -25,6 +25,7 @@ function mapDispatchToProps (dispatch) {
   return {
     updateToken (payload) { return dispatch(Actions.updateToken(payload)) },
     updateChat (payload) { return dispatch(Actions.updateChat(payload)) },
+    updateUser (payload) { return dispatch(Actions.updateUser(payload)) },
     updateChatList (payload) { return dispatch(Actions.updateChatList(payload)) }
   }
 }
@@ -74,7 +75,9 @@ export default connect (mapStateToProps, mapDispatchToProps)(
           this.props.updateToken(res.token)
           this.reloadRedux(res.id)
           socket.open().then(() => {
-            socket.hello({token: res.token})
+            socket.hello({token: res.token}).then(data => {
+              this.props.updateUser(data)
+            })
             RouterActions.main()
           })
         }
