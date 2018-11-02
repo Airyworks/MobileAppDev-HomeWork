@@ -9,7 +9,7 @@ import * as Actions from '../actions'
 import SliderBar from '../components/SliderBar'
 import EmojiBackground from '../components/EmojiBackground'
 import md5 from 'md5'
-import socket from '../components/Socket'
+import socket from '../Socket'
 
 const { width, height } = Dimensions.get('window')
 const headerHeight = 48
