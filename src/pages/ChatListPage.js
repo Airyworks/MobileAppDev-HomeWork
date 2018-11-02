@@ -132,6 +132,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(
               data={this.props.chatList}
               renderItem={this.renderChat}
               keyExtractor={(item) => item.name}
+              extraData={this.props.chats}
             />
           </View>
         </EmojiBackground>

@@ -38,7 +38,8 @@ export default connect (mapStateToProps, mapDispatchToProps)(
       this.state = {
         selfUserId: 0,
         historyHeight: new Animated.Value(height - 140),
-        input: ''
+        input: '',
+        useless: 1
       }
     }
 
@@ -46,6 +47,9 @@ export default connect (mapStateToProps, mapDispatchToProps)(
       const self = this
       this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', (e) => {this._keyboardDidShow(e, self)})
       this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', (e) => {this._keyboardDidHide(e, self)})
+
+      // change a useless state
+      this.setState({useless: 0})
     }
   
     componentWillUnmount () {
@@ -53,19 +57,37 @@ export default connect (mapStateToProps, mapDispatchToProps)(
       this.keyboardDidHideListener.remove()
     }
 
-    shouldComponentUpdate (nextProps) {
-      const chats = nextProps.chats.find(i => i.name === nextProps.openname)
-      if (!chats) {
-        return true
+    componentWillUpdate (nextProps) {
+      const chat = nextProps.chats.find(i => i.name === nextProps.openname)
+      if (!chat) {
+        return
       }
-      const unreads = chats.history.filter(j => j.isRead === false)
+      const unreads = chat.history.filter(j => j.isRead === false)
       if (unreads.length > 0) {
         nextProps.readMessage(nextProps.openname, unreads.map(i => i.uuid))
-        return false
-      } else {
-        return true
+        AsyncStorage.setItem(`${this.props.account.id}`, JSON.stringify({
+          chats: this.props.chats,
+          chatList: this.props.chatList
+        }))
+        .catch(err => {
+          console.error(err)
+        })
       }
     }
+
+    // shouldComponentUpdate (nextProps) {
+    //   const chats = nextProps.chats.find(i => i.name === nextProps.openname)
+    //   if (!chats) {
+    //     return true
+    //   }
+    //   const unreads = chats.history.filter(j => j.isRead === false)
+    //   if (unreads.length > 0) {
+    //     nextProps.readMessage(nextProps.openname, unreads.map(i => i.uuid))
+    //     return false
+    //   } else {
+    //     return true
+    //   }
+    // }
 
     _keyboardDidShow (e, self) {
       // Alert.alert(e.endCoordinates.height.toString())
