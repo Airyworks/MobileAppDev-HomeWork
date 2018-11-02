@@ -7,38 +7,7 @@ export const initialState = {
     name: '成龙',
     avatar: 'https://user-images.githubusercontent.com/9587680/47803553-b99c4480-dd6d-11e8-8299-de4ddd091e1a.png'
   },
-  friendList: [
-    {
-      id: 1,
-      name: 'Winnie',
-      avatar: 'https://user-images.githubusercontent.com/9587680/47803551-b903ae00-dd6d-11e8-8dd8-e0ea57fc32fb.jpg'
-    },
-    {
-      id: 2,
-      name: 'パチュリー・ノーレッジ',
-      avatar: 'https://avatars3.githubusercontent.com/u/9587680'
-    },
-    {
-      id: 3,
-      name: '奥巴马',
-      avatar: 'https://user-images.githubusercontent.com/9587680/47837461-0e2fd600-dde7-11e8-82e8-7b6c20f6cc69.png'
-    },
-    {
-      id: 4,
-      name: '特朗普',
-      avatar: 'https://user-images.githubusercontent.com/9587680/47837462-0e2fd600-dde7-11e8-8ff9-57c6c459f541.png'
-    },
-    {
-      id: 5,
-      name: '古天乐',
-      avatar: 'https://user-images.githubusercontent.com/9587680/47837463-0e2fd600-dde7-11e8-8a18-aaee98b4ba17.png'
-    },
-    {
-      id: 6,
-      name: '张家辉',
-      avatar: 'https://user-images.githubusercontent.com/9587680/47837465-0ec86c80-dde7-11e8-902b-af84d642d2ef.png'
-    }
-  ],
+  friendList: [],
   chatList: [
     {
       "name": 'room.0',
@@ -80,6 +49,30 @@ export default handleActions({
     return {
       ...state,
       token: payload
+    }
+  },
+  'update-friends' (state, {payload}) {
+    return {
+      ...state,
+      friendList: payload
+    }
+  },
+  'update-channel' (state, {payload}) {
+    const chats = Array.from(state.chatList)
+    payload.forEach(ch => {
+      if (!chats.find(i => i.name === ch.name)) {
+        chats.push({
+          name: ch.name,
+          users: ch.users,
+          last: ''
+        })
+      } else {
+        chats.find(i => i.name === ch.name).users = ch.users
+      }
+    })
+    return {
+      ...state,
+      chatList: chats
     }
   },
   'friend-list' (state) {

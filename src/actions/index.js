@@ -21,6 +21,10 @@ export const playerHideAction = createAction('player-hide')
 
 export const updateToken = createAction('update-token')
 export const updateUser = createAction('update-user')
+export const updateFriendsAction = createAction('update-friends')
+export const updateChannelAction = createAction('update-channel')
+export const openChatAction = createAction('open-chat')
+export const PullMessageAction = createAction('pull-message')
 
 export const WSHiAction = createAction('ws-hi')
 export const WSNewChatResAction = createAction('ws-new-chat-res')

@@ -5,18 +5,29 @@ import { Avatar, ListItem } from 'react-native-elements'
 import EmojiBackground from '../components/EmojiBackground'
 import { Actions as RouterActions } from 'react-native-router-flux'
 import * as Actions from '../actions'
+import config from '../../config'
+import socket from '../Socket';
 
 const {width, height} = Dimensions.get('window')
 
 function mapStateToProps (state) {
   return {
+    userId: state.main.account,
     friendList: state.main.friendList
   }
 }
 
 function mapDispatchToProps (dispatch) {
   return {
-    // play () { return dispatch(Actions.musicPlayAction()) }
+    updateFriends (friends) {
+      return dispatch(Actions.updateFriendsAction(friends))
+    },
+    openChat(chatname) {
+      return dispatch(Actions.openChatAction(chatname)) 
+    },
+    updateChannel(channel) {
+      return dispatch(Actions.updateChannelAction(channel))
+    }
   }
 }
 
@@ -24,7 +35,29 @@ export default connect (mapStateToProps, mapDispatchToProps)(
   class FriendListPage extends React.Component {
     constructor (props) {
       super(props)
-      this.state = {}     // do not use redux because of simplifying
+    }
+
+    componentDidMount() {
+      (() => {
+        fetch(`http://${config.http.host}:${config.http.port}/friends`, {
+          method: 'GET',
+          credentials:'include'
+        })
+        .then(response => {
+          if (response.status === 200) {
+            return response.json()
+          } else {
+            Alert.alert('Need login first.')
+          }
+        }).then(res => {
+          if (res) {
+            this.props.updateFriends(res)
+          }
+        })
+        .catch(err => {
+          console.error(err)
+        })
+      })()
     }
 
     renderAvatar = (uri) => {
@@ -45,8 +78,17 @@ export default connect (mapStateToProps, mapDispatchToProps)(
           leftAvatar={this.renderAvatar(item.avatar)}
           title={item.name}
           containerStyle={styles.listItem}
+
           onPress={() => {
-            // Alert.alert(`start chat ${l.name}`)
+            this.props.openChat('')
+            RouterActions.chat()
+            socket.newChat({to: [{id: item.id}]}).then(({channel}) => {
+              this.props.openChat(channel)
+              this.props.updateChannel([{
+                name: channel,
+                users: [item, this.props.user]
+              }])
+            })
           }}
         />
       )

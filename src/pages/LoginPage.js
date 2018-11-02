@@ -56,6 +56,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
         },
+        credentials:'include',
         body
       })
       .then(response => {
@@ -67,6 +68,9 @@ export default connect (mapStateToProps, mapDispatchToProps)(
       }).then(res => {
         if (res) {
           this.props.updateUser(res.token)
+          socket.open().then(() => {
+            socket.hello({token: res.token})
+          })
           RouterActions.main()
         }
       })

@@ -6,6 +6,8 @@ import { Avatar, ListItem } from 'react-native-elements'
 import { Actions as RouterActions } from 'react-native-router-flux'
 import EmojiBackground from '../components/EmojiBackground'
 import * as Actions from '../actions'
+import socket from '../Socket'
+import config from '../../config'
 
 const {width, height} = Dimensions.get('window')
 
@@ -18,7 +20,9 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    // play () { return dispatch(Actions.musicPlayAction()) }
+    updateChannel (channels) {
+      return dispatch(Actions.updateChannelAction(channels))
+    }
   }
 }
 
@@ -26,7 +30,29 @@ export default connect (mapStateToProps, mapDispatchToProps)(
   class ChatListPage extends React.Component {
     constructor (props) {
       super(props)
-      this.state = {}     // do not use redux because of simplifying
+    }
+
+    componentDidMount() {
+      (() => {
+        fetch(`http://${config.http.host}:${config.http.port}/channels`, {
+          method: 'GET',
+          credentials:'include'
+        })
+        .then(response => {
+          if (response.status === 200) {
+            return response.json()
+          } else {
+            Alert.alert('Need login first.')
+          }
+        }).then(res => {
+          if (res) {
+            this.props.updateChannel(res)
+          }
+        })
+        .catch(err => {
+          console.error(err)
+        })
+      })()
     }
 
     renderAvatar = (uri) => {
@@ -55,7 +81,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(
         }
       } else {
         const nameArr = []
-        for (let i = 0; i < chat.users.length; i++) {
+        for (let i = 0; i < item.users.length; i++) {
           nameArr.push(item.users[i].name)
           avatar = item.users[i].avatar
         }
