@@ -14,7 +14,18 @@ import socket from '../components/Socket'
 const { width, height } = Dimensions.get('window')
 const headerHeight = 48
 
-export default connect ()(
+function mapStateToProps (state) {
+  return {
+  }
+}
+
+function mapDispatchToProps (dispatch) {
+  return {
+    updateUser (payload) { return dispatch(Actions.updateUser(payload)) }
+  }
+}
+
+export default connect (mapStateToProps, mapDispatchToProps)(
   class LoginPage extends React.Component {
     constructor (props) {
       super(props)
@@ -26,68 +37,42 @@ export default connect ()(
       }
     }
 
-    componentDidMount(){
-      // Alert.alert(`http://${this.config.http.host}:${this.config.http.port}/login`)
-      // const obj = {
-      //   name: 'AAA',
-      //   pwd: md5('123456')
-      // }
-      // const body = Object.keys(obj).reduce((o,key)=>(o.set(key, obj[key]), o), new FormData())
-
-      // return fetch(`http://${this.config.http.host}:${this.config.http.port}/login`, {
-      //   method: 'POST',
-      //   headers: {
-      //     Accept: 'application/json',
-      //     'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
-      //   },
-      //   body
-      // })
-      // .then(response => {
-      //   console.warn(response)
-      // })
+    componentDidMount() {
+      this.login()
     }
 
     login = () => {
-      return RouterActions.main()
-      fetch(`https://${this.config.http.host}:${this.config.http.port}/login`, {
+      const params = {
+        name: 'AAA',//this.state.username,
+        pwd: md5('123456')//md5(this.state.password)
+      }
+
+      const body = Object.keys(params).map((key) => {
+        return encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
+      }).join('&')
+
+      return fetch(`http://${this.config.http.host}:${this.config.http.port}/login`, {
         method: 'POST',
         headers: {
-          Accept: 'application/json',
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
         },
-        body: {
-          name: 'AAA',
-          pwd: md5('123456')
-        },
+        body
       })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        Alert.alert(JSON.stringify(responseJson))
+      .then(response => {
+        if (response.status === 200) {
+          return response.json()
+        } else {
+          Alert.alert('username and password mismatched.')
+        }
+      }).then(res => {
+        if (res) {
+          this.props.updateUser(res.token)
+          RouterActions.main()
+        }
       })
-      .catch((err) => {
-        console.error(JSON.stringify(err))
+      .catch(err => {
+        console.error(err)
       })
-      // Alert.alert(`http://${this.config.http.host}:${this.config.http.port}/login`)
-      // if (this.state.username && this.state.password) {
-        // fetch(`http://${this.config.http.host}:${this.config.http.port}/login`, {
-        //   method: 'POST',
-        //   headers: {
-        //     Accept: 'application/json',
-        //     'Content-Type': 'multipart/form-data'
-        //   },
-        //   body: {
-        //     name: this.state.username,
-        //     pwd: this.state.password
-        //   },
-        // })
-        // .then((response) => response.json())
-        // .then((responseJson) => {
-        //   Alert.alert(JSON.stringify(responseJson))
-        // })
-        // .catch((err) => {
-        //   Alert.alert(JSON.stringify(err))
-        // })
-      // }
     }
 
     renderLoginForm = () => {

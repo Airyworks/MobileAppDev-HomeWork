@@ -20,6 +20,7 @@ export const playerShowAction = createAction('player-show')
 export const playerHideAction = createAction('player-hide')
 
 export const updateToken = createAction('update-token')
+export const updateUser = createAction('update-user')
 
 export const WSHiAction = createAction('ws-hi')
 export const WSNewChatResAction = createAction('ws-new-chat-res')
