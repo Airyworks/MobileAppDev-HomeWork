@@ -22,7 +22,10 @@ function mapDispatchToProps (dispatch) {
   return {
     updateChannel (channels) {
       return dispatch(Actions.updateChannelAction(channels))
-    }
+    },
+    openChat(chatname) {
+      return dispatch(Actions.openChatAction(chatname)) 
+    },
   }
 }
 
@@ -96,6 +99,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(
           containerStyle={styles.listItem}
           onPress={() => {
             // Alert.alert(`go to chat ${l.name}`)
+            this.props.openChat(item.name)
             RouterActions.chat()
           }}
         />

@@ -83,6 +83,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(
             this.props.openChat('')
             RouterActions.chat()
             socket.newChat({to: [{id: item.id}]}).then(({channel}) => {
+              console.warn(channel)
               this.props.openChat(channel)
               this.props.updateChannel([{
                 name: channel,

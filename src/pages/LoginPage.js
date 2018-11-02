@@ -43,13 +43,12 @@ export default connect (mapStateToProps, mapDispatchToProps)(
     }
 
     componentDidMount() {
-      this.login()
     }
 
     login = () => {
       const params = {
-        name: 'AAA',//this.state.username,
-        pwd: md5('123456')//md5(this.state.password)
+        name: this.state.username,//this.state.username,
+        pwd: md5(this.state.password)//md5(this.state.password)
       }
 
       const body = Object.keys(params).map((key) => {
@@ -149,8 +148,9 @@ export default connect (mapStateToProps, mapDispatchToProps)(
             inputContainerStyle={[styles.button, {padding: 0}]}
             buttonStyle={styles.buttonStyle}
             titleStyle={styles.buttonTextStyle}
-            title='login'
             loading={true}
+            color='#CCC'
+            title='login'
             onPress={this.login}
           />
           {/* <Button style={styles.button} title="login"></Button> */}

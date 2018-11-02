@@ -151,11 +151,13 @@ class Socket {
       this.socket.emit('push-message', {sequence, channel, content})
       return new Promise((r, j) => {
         this.socket.once('server-received', (data) => {
-          r({
-            sequence: data.sequence,
-            time: data.time,
-            msgId: data.msgId
-          })
+          if (data.sequence === sequence) {
+            r({
+              sequence: data.sequence,
+              time: data.time,
+              msgId: data.msgId
+            })
+          }
         })
         this.socket.once('forbidden', () => {
           j(new Error('Error access'))
@@ -177,6 +179,9 @@ socket.on('pull-message', (data) => {
     ...data,
     userId: store.getState().main.account.id
   }))
+  const uuids = data.messages.map(i => i.uuids.find(v => v.user === store.getState().main.account.id).uuid)
+
+  socket.clientReceived({uuids})
 })
 
 export default socket

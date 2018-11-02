@@ -59,6 +59,37 @@ export default handleActions({
       chats: payload
     }
   },
+  'add-message' (state, {payload}) {
+    const chats = Array.from(state.chats)
+    if (!chats.find(i => i.name === payload.channel)) {
+      chats.push({
+        name: payload.channel,
+        history: [payload]
+      })
+    } else {
+      chats.find(i => i.name === payload.channel).history.push(payload)
+    }
+    return {
+      ...state,
+      chats
+    }
+  },
+  'read-message' (state, {payload}) {
+    const {channel, uuids} = payload
+    const chats = Array.from(state.chats)
+    const ch = chats.find(i => i.name === channel)
+    if (ch) {
+      ch.history = ch.history.map(i => {
+        if (uuids.includes(i.uuid)) {
+          i.isRead = true
+        }
+      })
+    }
+    return {
+      ...state,
+      chats
+    }
+  },
   /*
     Here are websocket events
   */

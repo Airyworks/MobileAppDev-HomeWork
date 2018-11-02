@@ -26,6 +26,8 @@ export const updateFriendsAction = createAction('update-friends')
 export const updateChannelAction = createAction('update-channel')
 export const openChatAction = createAction('open-chat')
 export const PullMessageAction = createAction('pull-message')
+export const AddMessageAction = createAction('add-message')
+export const ReadMessageAction = createAction('read-message')
 
 export const WSHiAction = createAction('ws-hi')
 export const WSNewChatResAction = createAction('ws-new-chat-res')

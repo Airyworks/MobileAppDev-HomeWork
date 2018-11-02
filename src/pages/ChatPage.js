@@ -1,12 +1,12 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Icon from 'react-native-vector-icons/FontAwesome'
 import { View, Dimensions, Animated, FlatList, ScrollView, Alert, Keyboard } from 'react-native'
-import { Avatar, ListItem, Input } from 'react-native-elements'
+import { Avatar, ListItem, Icon, Input } from 'react-native-elements'
 import { Actions as RouterActions } from 'react-native-router-flux'
 import EmojiBackground from '../components/EmojiBackground'
 import Bubble from '../components/Bubble'
 import * as Actions from '../actions'
+import socket from '../Socket'
 
 const {width, height} = Dimensions.get('window')
 
@@ -21,9 +21,14 @@ function mapStateToProps (state) {
 
 function mapDispatchToProps (dispatch) {
   return {
-    // play () { return dispatch(Actions.musicPlayAction()) }
+    addMessage (message) { return dispatch(Actions.AddMessageAction(message)) },
+    readMessage (channel, uuids) {
+      return dispatch(Actions.ReadMessageAction({channel, uuids}))
+    }
   }
 }
+
+let sequence = 1
 
 export default connect (mapStateToProps, mapDispatchToProps)(
   class ChatPage extends React.Component {
@@ -31,7 +36,8 @@ export default connect (mapStateToProps, mapDispatchToProps)(
       super(props)
       this.state = {
         selfUserId: 0,
-        historyHeight: new Animated.Value(height - 140)
+        historyHeight: new Animated.Value(height - 140),
+        input: ''
       }
     }
 
@@ -44,6 +50,20 @@ export default connect (mapStateToProps, mapDispatchToProps)(
     componentWillUnmount () {
       this.keyboardDidShowListener.remove()
       this.keyboardDidHideListener.remove()
+    }
+
+    shouldComponentUpdate (nextProps) {
+      const chats = nextProps.chats.find(i => i.name === nextProps.openname)
+      if (!chats) {
+        return true
+      }
+      const unreads = chats.history.filter(i => i.isRead === false)
+      if (unreads.length > 0) {
+        nextProps.readMessage(nextProps.openname, unreads.map(i => i.uuid))
+        return false
+      } else {
+        return true
+      }
     }
 
     _keyboardDidShow (e, self) {
@@ -67,16 +87,6 @@ export default connect (mapStateToProps, mapDispatchToProps)(
       ).start()
     }
 
-    getFriendById = (id) => {
-      if (this.props.account.id === id) return this.props.account
-      for (let friend of this.props.friendList) {
-        if (friend.id === id) {
-          return friend
-        }
-      }
-      return null
-    }
-
     renderBubble = (item) => {
       item = item.item
 
@@ -89,12 +99,57 @@ export default connect (mapStateToProps, mapDispatchToProps)(
       )
     }
 
+    send = () => {
+      const msg = this.state.input
+      const channel = this.props.openname
+      const self = this.props.account
+      if (msg === '') {
+        return
+      }
+      socket.pushMessage({
+        sequence: sequence++,
+        channel,
+        content: msg
+      }).then(data => {
+        this.setState({input: ''})
+        this.props.addMessage({
+          uuid: Math.ceil(new Date(data.time).getTime() / 1000),
+          isRead: true,
+          sender: self,
+          time: new Date(data.time).getTime(),
+          content: msg,
+          channel: channel
+        })
+      }).catch(_ => {
+        Alert.alert(`Network error`, 'please resend message')
+      })
+    }
+
+    renderSendBtn = () => {
+      return (
+        <Icon
+          name="call-made"
+          color="#00b973"
+          // reverse
+          underlayColor="#FFF"
+          size={24}
+          iconStyle={{}}
+          containerStyle={{marginRight: 8}}
+          onPress={this.send}
+        />
+      )
+    }
+
     renderInput = () => {
       return (
         <View>
           <Input
+            onChangeText={t => this.setState({input: t})}
+            value={this.state.input}
             containerStyle={styles.containerStyle}
-            inputContainerStyle={styles.inputContainerStyle}/>
+            inputContainerStyle={styles.inputContainerStyle}
+            rightIcon={this.renderSendBtn}  
+          />
         </View>
       )
     }
@@ -112,27 +167,13 @@ export default connect (mapStateToProps, mapDispatchToProps)(
 
       return (
         <EmojiBackground>
-          {/* <Animated.ScrollView style={{ height: this.state.historyHeight }}>
-            {
-            openchat.history.map((l, i) => {
-              const friend = this.getFriendById(l.from)
-              return (
-                <Bubble
-                  key={i}
-                  right={l.from === this.props.account.id}
-                  text={l.content}
-                  avatar={friend.avatar}
-                />
-              )
-            })
-            }
-          </Animated.ScrollView> */}
           <Animated.View style={{height: this.state.historyHeight}}>
             <FlatList
               data={openchat.history.reverse()}
               renderItem={this.renderBubble}
               keyExtractor={item => item.time.toString()}
               inverted={true}
+              extraData={this.props.chats}
             />
           </Animated.View>
           {this.renderInput()}
