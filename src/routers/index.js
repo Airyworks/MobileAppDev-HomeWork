@@ -10,6 +10,7 @@ import ChatHeader from '../components/ChatHeader'
 import FriendList from '../pages/FriendListPage'
 import ChatList from '../pages/ChatListPage'
 import Chat from '../pages/ChatPage'
+import User from '../pages/UserPage'
 import config from '../../config'
 
 const scenes = Actions.create(
@@ -38,6 +39,18 @@ const scenes = Actions.create(
             )}
             hideNavBar
             component={FriendList}
+            />
+      <Scene key='user'
+            tabBarLabel='user'
+            icon={ () => (
+              <Icon
+                name='user'
+                size={24}
+                color='#666'
+              />
+            )}
+            hideNavBar
+            component={User}
             />
     </Tabs>
     <Scene key='chat' navBar={ChatHeader} component={Chat}/>

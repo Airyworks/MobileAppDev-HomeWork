@@ -100,17 +100,6 @@ export default connect (mapStateToProps, mapDispatchToProps)(
       .catch(err => {
         console.error(err)
       })
-
-      // AsyncStorage.setItem(`${id}`, JSON.stringify({
-      //   chats: this.props.chats,
-      //   chatList: this.props.chatList
-      // }))
-      // .then(() => {
-      //   Alert.alert('done')
-      // })
-      // .catch(err => {
-      //   console.error(err)
-      // })
     }
 
     renderLoginForm = () => {
