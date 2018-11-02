@@ -1,3 +1,4 @@
+import { AsyncStorage } from 'react-native'
 import * as Actions from './actions'
 import { store } from './store'
 import io from 'socket.io-client'
@@ -21,7 +22,7 @@ const acts = [
 ]
 class Socket {
   constructor() {
-    this.socket = io(`${config.socket.host}:${config.socket.port}`, {
+    this.socket = io(`ws://${config.socket.host}:${config.socket.port}`, {
       transports: ['websocket'],
       autoConnect: false
     })
@@ -177,6 +178,15 @@ socket.on('pull-message', (data) => {
     ...data,
     userId: store.getState().main.account.id
   }))
+  
+  const state = store.getState()
+  AsyncStorage.setItem(`${state.main.id}`, JSON.stringify({
+    chats: state.chat.chats,
+    chatList: state.main.chatList
+  }))
+  .catch(err => {
+    console.error(err)
+  })
 })
 
 export default socket

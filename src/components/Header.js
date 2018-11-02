@@ -5,7 +5,8 @@ import { Actions as RouterActions } from 'react-native-router-flux'
 
 const title = {
   '_chatlist': 'Chat List',
-  '_friend': 'Friend List'
+  '_friend': 'Friend List',
+  '_user': 'User Info'
 }
 
 export default class MyHeader extends React.Component {
