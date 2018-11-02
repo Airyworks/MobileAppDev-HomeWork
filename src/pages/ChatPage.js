@@ -79,13 +79,12 @@ export default connect (mapStateToProps, mapDispatchToProps)(
 
     renderBubble = (item) => {
       item = item.item
-      const friend = this.getFriendById(item.from)
 
       return(
         <Bubble
-          right={item.from === this.props.account.id}
+          right={item.sender.id === this.props.account.id}
           text={item.content}
-          avatar={friend.avatar}
+          avatar={item.sender.avatar}
         />
       )
     }

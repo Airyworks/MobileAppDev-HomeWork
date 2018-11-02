@@ -1,5 +1,5 @@
 import React from 'react'
-import { Animated, View, Dimensions, Alert } from 'react-native'
+import { AsyncStorage, View, Dimensions, Alert } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { Input, Button } from 'react-native-elements'
 import { connect } from 'react-redux'
@@ -16,12 +16,16 @@ const headerHeight = 48
 
 function mapStateToProps (state) {
   return {
+    chatList: state.main.chatList,
+    chats: state.main.chats
   }
 }
 
 function mapDispatchToProps (dispatch) {
   return {
-    updateUser (payload) { return dispatch(Actions.updateUser(payload)) }
+    updateToken (payload) { return dispatch(Actions.updateToken(payload)) },
+    updateChat (payload) { return dispatch(Actions.updateChat(payload)) },
+    updateChatList (payload) { return dispatch(Actions.updateChatList(payload)) }
   }
 }
 
@@ -68,6 +72,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(
       }).then(res => {
         if (res) {
           this.props.updateUser(res.token)
+          this.reloadRedux(res.id)
           socket.open().then(() => {
             socket.hello({token: res.token})
           })
@@ -77,6 +82,34 @@ export default connect (mapStateToProps, mapDispatchToProps)(
       .catch(err => {
         console.error(err)
       })
+    }
+
+    reloadRedux = (id) => {
+      // reload chat history & chat list
+
+      AsyncStorage.getItem(`${id}`)
+      .then((resStr) => {
+        if (resStr) {
+          const res = JSON.parse(resStr)
+          this.props.updateChat(res.chats)
+          this.props.updateChatList(res.chatList)
+        }
+        RouterActions.main()
+      })
+      .catch(err => {
+        console.error(err)
+      })
+
+      // AsyncStorage.setItem(`${id}`, JSON.stringify({
+      //   chats: this.props.chats,
+      //   chatList: this.props.chatList
+      // }))
+      // .then(() => {
+      //   Alert.alert('done')
+      // })
+      // .catch(err => {
+      //   console.error(err)
+      // })
     }
 
     renderLoginForm = () => {
