@@ -6,7 +6,7 @@ import { connect as socketConnect } from 'socket.io-client'
 
 function mapStateToProps (state) {
   return {
-    friendList: state.main.friendList
+    token: state.main.token
   }
 }
 
@@ -25,15 +25,17 @@ export default connect (mapStateToProps, mapDispatchToProps)(
         transports: ['websocket']
       })
 
-      const token = '329EF2787271D377'
-
       const evs = ['hi', 'new-chat-res', 'pull-message', 'server-received', 'forbidden', 'invalid-param','token-missing']
       evs.forEach(i => {
         this.socket.on(i, data => {
           Alert.alert(JSON.stringify(data))
         })
       })
-      this.socket.emit('hello', { token })
+
+      if (this.props.token) {
+        Alert.alert(this.props.token)
+        this.socket.emit('hello', { token: this.props.token })
+      }
     }
 
     render() {

@@ -1,6 +1,7 @@
 import { handleActions } from 'redux-actions'
 
 export const initialState = {
+  token: '',
   account: {
     id: 0,
     name: '成龙',
@@ -75,6 +76,12 @@ export const initialState = {
 }
 
 export default handleActions({
+  'update-token' (state, {payload}) {
+    return {
+      ...state,
+      token: payload
+    }
+  },
   'friend-list' (state) {
     return {
       ...state,

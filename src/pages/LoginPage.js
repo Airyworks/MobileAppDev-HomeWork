@@ -8,6 +8,7 @@ import idGenerator from 'unique-id-generator'
 import * as Actions from '../actions'
 import SliderBar from '../components/SliderBar'
 import EmojiBackground from '../components/EmojiBackground'
+import md5 from 'md5'
 
 const { width, height } = Dimensions.get('window')
 const headerHeight = 48
@@ -16,7 +17,76 @@ export default connect ()(
   class LoginPage extends React.Component {
     constructor (props) {
       super(props)
-      this.state = { }
+      const { config } = props
+      this.config = config
+      this.state = {
+        username: '',
+        password: ''
+      }
+    }
+
+    componentDidMount(){
+      // Alert.alert(`http://${this.config.http.host}:${this.config.http.port}/login`)
+      // const obj = {
+      //   name: 'AAA',
+      //   pwd: md5('123456')
+      // }
+      // const body = Object.keys(obj).reduce((o,key)=>(o.set(key, obj[key]), o), new FormData())
+
+      // return fetch(`http://${this.config.http.host}:${this.config.http.port}/login`, {
+      //   method: 'POST',
+      //   headers: {
+      //     Accept: 'application/json',
+      //     'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
+      //   },
+      //   body
+      // })
+      // .then(response => {
+      //   console.warn(response)
+      // })
+    }
+
+    login = () => {
+      return RouterActions.main()
+      fetch(`https://${this.config.http.host}:${this.config.http.port}/login`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data'
+        },
+        body: {
+          name: 'AAA',
+          pwd: md5('123456')
+        },
+      })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        Alert.alert(JSON.stringify(responseJson))
+      })
+      .catch((err) => {
+        console.error(JSON.stringify(err))
+      })
+      // Alert.alert(`http://${this.config.http.host}:${this.config.http.port}/login`)
+      // if (this.state.username && this.state.password) {
+        // fetch(`http://${this.config.http.host}:${this.config.http.port}/login`, {
+        //   method: 'POST',
+        //   headers: {
+        //     Accept: 'application/json',
+        //     'Content-Type': 'multipart/form-data'
+        //   },
+        //   body: {
+        //     name: this.state.username,
+        //     pwd: this.state.password
+        //   },
+        // })
+        // .then((response) => response.json())
+        // .then((responseJson) => {
+        //   Alert.alert(JSON.stringify(responseJson))
+        // })
+        // .catch((err) => {
+        //   Alert.alert(JSON.stringify(err))
+        // })
+      // }
     }
 
     renderLoginForm = () => {
@@ -26,6 +96,7 @@ export default connect ()(
             containerStyle={styles.input}
             inputContainerStyle={styles.inputText}
             placeholder='username'
+            onChangeText={(username) => this.setState({username})}
             leftIcon={
               <Icon
                 name='user'
@@ -38,6 +109,8 @@ export default connect ()(
             containerStyle={styles.input}
             inputContainerStyle={styles.inputText}
             placeholder='password'
+            secureTextEntry={true}
+            onChangeText={(password) => this.setState({password})}
             leftIcon={
               <Icon
                 name='lock'
@@ -53,12 +126,7 @@ export default connect ()(
             titleStyle={styles.buttonTextStyle}
             title='login'
             loading={true}
-            onPress={() => {
-              // user verify
-              RouterActions.main()
-              // RouterActions.friend()
-              // RouterActions.header()
-            }}
+            onPress={this.login}
           />
           {/* <Button style={styles.button} title="login"></Button> */}
         </View>

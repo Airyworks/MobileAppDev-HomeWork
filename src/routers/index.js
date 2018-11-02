@@ -10,11 +10,12 @@ import ChatHeader from '../components/ChatHeader'
 import FriendList from '../pages/FriendListPage'
 import ChatList from '../pages/ChatListPage'
 import Chat from '../pages/ChatPage'
+import config from '../../config'
 
 const scenes = Actions.create(
   <Scene key='root'>
-    <Scene key='login' hideNavBar component={Login}/>
-    <Tabs key="main" navBar={Header} initial>
+    <Scene key='login' hideNavBar component={Login} config={config} initial/>
+    <Tabs key="main" navBar={Header}>
       <Scene key='chatlist'
             tabBarLabel='chat'
             icon={ () => (
