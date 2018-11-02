@@ -83,6 +83,7 @@ export default handleActions({
         if (uuids.includes(i.uuid)) {
           i.isRead = true
         }
+        return i
       })
     }
     return {

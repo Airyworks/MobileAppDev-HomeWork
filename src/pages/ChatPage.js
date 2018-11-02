@@ -57,7 +57,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(
       if (!chats) {
         return true
       }
-      const unreads = chats.history.filter(i => i.isRead === false)
+      const unreads = chats.history.filter(j => j.isRead === false)
       if (unreads.length > 0) {
         nextProps.readMessage(nextProps.openname, unreads.map(i => i.uuid))
         return false
