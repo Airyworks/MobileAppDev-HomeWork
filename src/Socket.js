@@ -1,7 +1,7 @@
-import * as Actions from '../actions'
-import store from '../store'
+import * as Actions from './actions'
+import store from './store'
 import io from 'socket.io-client'
-import config from '../../config'
+import config from '../config'
 
 const evs = [
   { ev: 'hi', action: Actions.WSHiAction },

@@ -20,7 +20,6 @@ export const playerShowAction = createAction('player-show')
 export const playerHideAction = createAction('player-hide')
 
 export const updateToken = createAction('update-token')
-export const updateUser = createAction('update-user')
 
 export const WSHiAction = createAction('ws-hi')
 export const WSNewChatResAction = createAction('ws-new-chat-res')
@@ -29,3 +28,6 @@ export const WSServerReceivedAction = createAction('ws-server-received')
 export const WSForbiddenAction = createAction('ws-forbidden')
 export const WSInvalidParamAction = createAction('ws-invalid-param')
 export const WSTokenMissingAction = createAction('ws-token-missing')
+
+export const updateChatList = createAction('update-chat-list')
+export const updateChat = createAction('update-chat')
