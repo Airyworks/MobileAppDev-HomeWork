@@ -54,7 +54,7 @@ export default connect (mapStateToProps, mapDispatchToProps)(
           }
         })
         .catch(err => {
-          console.error(err)
+          // console.error(err)
         })
       })()
     }

@@ -195,4 +195,10 @@ socket.on('pull-message', (data) => {
   })
 })
 
+socket.socket.on('reconnect', _ => {
+  socket.socket.once('connect', _ => {
+    socket.hello({token: store.getState().main.token}).catch(_ => {})
+  })
+})
+
 export default socket
